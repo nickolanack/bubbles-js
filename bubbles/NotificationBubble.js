@@ -21,7 +21,7 @@ var NotificationBubble = new Class({
       el.appendChild(titleEl);
       titleEl.innerHTML = title;
 
-      if (description !== null) {
+      if (typeof description == 'string') {
         var descriptionEl = new Element('div', {
           'class': 'description'
         });
@@ -119,7 +119,7 @@ NotificationBubble.Make = function(title, description, options) {
     window.parent.NotificationBubble.Make(title, description, options);
   } else {
     var t = title.slice(0);
-    var d = (description !== null ? description.slice(0) : null);
+    var d = (typeof description == 'string' ? description.slice(0) : null);
     var o = (options !== null ? Object.append({}, options) : null);
 
     new NotificationBubble(t, d, o);
