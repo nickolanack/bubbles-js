@@ -36,7 +36,7 @@ var NotificationBubble = new Class({
 
       return el;
     })();
-    me.options.window.$$('Body')[0].appendChild(me.element);
+    me._insertElement().appendChild(me.element);
     if (!me.options.window.NotificationBubbles) {
       me.options.window.NotificationBubbles = [];
     }
@@ -45,12 +45,13 @@ var NotificationBubble = new Class({
 
   },
   _insertElement: function() {
+    var me = this;
     return (
-      document.fullscreenElement ||
-      document.webkitFullscreenElement ||
-      document.mozFullscreenElement ||
-      document.msFullscreenElement ||
-      document.body
+      me.options.window.document.fullscreenElement ||
+      me.options.window.document.webkitFullscreenElement ||
+      me.options.window.document.mozFullscreenElement ||
+      me.options.window.document.msFullscreenElement ||
+      me.options.window.document.body
     );
   },
   getPosition: function() {
