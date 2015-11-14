@@ -1,5 +1,5 @@
 'use strict';
-var BubbleMessage = new Class({
+var NotificationBubble = new Class({
   Implements: Events,
   initialize: function(title, description, options) {
 
@@ -37,19 +37,28 @@ var BubbleMessage = new Class({
       return el;
     })();
     me.options.window.$$('Body')[0].appendChild(me.element);
-    if (!me.options.window.BubbleMessages) {
-      me.options.window.BubbleMessages = [];
+    if (!me.options.window.NotificationBubbles) {
+      me.options.window.NotificationBubbles = [];
     }
-    me.options.window.BubbleMessages.push(me);
+    me.options.window.NotificationBubbles.push(me);
     me.drop(me.element);
 
+  },
+  _insertElement: function() {
+    return (
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullscreenElement ||
+      document.msFullscreenElement ||
+      document.body
+    );
   },
   getPosition: function() {
     var me = this;
     if (me.position) {
       return me.position;
     }
-    var bubbles = me.options.window.BubbleMessages.slice(0, me.options.window.BubbleMessages.length);
+    var bubbles = me.options.window.NotificationBubbles.slice(0, me.options.window.NotificationBubbles.length);
     var i = bubbles.indexOf(me);
 
     var last;
@@ -94,7 +103,7 @@ var BubbleMessage = new Class({
     var me = this;
     var fade = new Fx.Tween(el, {});
     fade.addEvent('onComplete', function() {
-      me.options.window.BubbleMessages.splice(me.options.window.BubbleMessages.indexOf(me), 1);
+      me.options.window.NotificationBubbles.splice(me.options.window.NotificationBubbles.indexOf(me), 1);
       el.dispose();
     });
     fade.start('opacity', 0);
@@ -104,14 +113,14 @@ var BubbleMessage = new Class({
 
 });
 
-BubbleMessage.Make = function(title, description, options) {
-  if (window.parent && window.parent.BubbleMessage && window.parent.BubbleMessage !== BubbleMessage) {
-    window.parent.BubbleMessage.Make(title, description, options);
+NotificationBubble.Make = function(title, description, options) {
+  if (window.parent && window.parent.NotificationBubble && window.parent.NotificationBubble !== NotificationBubble) {
+    window.parent.NotificationBubble.Make(title, description, options);
   } else {
     var t = title.slice(0);
     var d = (description !== null ? description.slice(0) : null);
     var o = (options !== null ? Object.append({}, options) : null);
 
-    new BubbleMessage(t, d, o);
+    new NotificationBubble(t, d, o);
   }
 };
